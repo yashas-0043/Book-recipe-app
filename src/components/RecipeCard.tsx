@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Clock, Users } from 'lucide-react';
@@ -13,13 +12,23 @@ interface RecipeCardProps {
 const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, featured = false }) => {
   const totalTime = recipe.prepTime + recipe.cookTime;
   
+  // Fix to ensure images load properly
+  const getImagePath = (imagePath: string) => {
+    // If the path already starts with http/https, return as is
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    // Otherwise, use the path as is (for local files)
+    return imagePath;
+  };
+  
   if (featured) {
     return (
       <Card className="overflow-hidden border-none shadow-lg hover:shadow-xl transition-shadow group">
         <Link to={`/recipe/${recipe.id}`} className="block">
           <div className="relative h-[400px]">
             <img 
-              src={recipe.image} 
+              src={getImagePath(recipe.image)} 
               alt={recipe.name}
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
             />
@@ -46,7 +55,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, featured = false }) => 
       <Link to={`/recipe/${recipe.id}`} className="block h-full">
         <div className="relative h-48">
           <img 
-            src={recipe.image} 
+            src={getImagePath(recipe.image)} 
             alt={recipe.name}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
           />

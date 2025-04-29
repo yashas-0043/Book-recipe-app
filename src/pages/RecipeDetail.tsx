@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Clock, Users, ChefHat, Utensils, IndianRupee } from 'lucide-react';
@@ -13,6 +12,16 @@ import Navbar from '@/components/Navbar';
 const RecipeDetail = () => {
   const { id } = useParams<{ id: string }>();
   const recipe = recipes.find(r => r.id === id);
+  
+  // Fix to ensure images load properly
+  const getImagePath = (imagePath: string) => {
+    // If the path already starts with http/https, return as is
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    // Otherwise, use the path as is (for local files)
+    return imagePath;
+  };
   
   if (!recipe) {
     return (
@@ -36,7 +45,7 @@ const RecipeDetail = () => {
         {/* Hero image */}
         <div className="relative h-72 md:h-96 overflow-hidden">
           <img 
-            src={recipe.image} 
+            src={getImagePath(recipe.image)} 
             alt={recipe.name} 
             className="w-full h-full object-cover"
           />
